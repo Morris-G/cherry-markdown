@@ -202,7 +202,7 @@ const defaultConfig = {
   // 预览区域跟随编辑器光标自动滚动
   autoScrollByCursor: true,
   // 外层容器不存在时，是否强制输出到body上
-  forceAppend: true,
+  forceAppend: false,
 };
 
 export default cloneDeep(defaultConfig);
