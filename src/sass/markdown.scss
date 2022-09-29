@@ -166,17 +166,35 @@
     }
   }
 
+  .link-quote {
+    color: $linkColor;
+  }
+
   a {
     color: $linkColor;
     position: relative;
-    padding-right: 15px;
+    text-decoration: none;
 
-    &[target="_blank"]::after {
-      content: '\EA10';
-      font-size: 12px;
-      font-family: "ch-icon";
-      position: absolute;
-      margin-left: 3px
+    &[target="_blank"] {
+      padding-right: 15px;
+      // border-bottom: 1px solid $linkColor;
+
+      &::after {
+        content: '\EA10';
+        font-size: 12px;
+        font-family: "ch-icon";
+        position: absolute;
+        margin-left: 3px;
+        top: -5px;
+      }
+    }
+
+    &.long-url {
+      padding-right: 0;
+
+      &:after {
+        display: none;
+      }
     }
 
     &:hover {

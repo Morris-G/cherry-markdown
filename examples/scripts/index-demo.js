@@ -26,6 +26,9 @@ var basicConfig = {
     global: {
       urlProcessor(url, srcType) {
         // console.log(`url-processor`, url, srcType);
+        // 达咩 link会二次处理
+        // const link = `<a href="${url}" data-sign="morris" rel="nofollow">(${url.substring(0, 25)})</a>`
+        // return link;
         return url;
       },
       smartOpenUrl: false
@@ -114,7 +117,7 @@ var basicConfig = {
   }
 };
 
-fetch('./markdown/basic copy.md').then((response) => response.text()).then((value) => {
+fetch('./markdown/basic.md').then((response) => response.text()).then((value) => {
   var config = Object.assign({}, basicConfig, { value: value });
   window.cherry = new Cherry(config);
 });

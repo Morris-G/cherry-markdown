@@ -201,8 +201,11 @@ export default class AutoLink extends SyntaxBase {
    */
   renderLink(url, text) {
     let linkText = text;
+    const className = [];
     if (typeof linkText !== 'string') {
-      linkText = url;
+      const Url = url.replace(/^https?:\/\/(www.)?/i, '');
+      Url.length > 23 ? className.push('long-url') : className.push('short-url');
+      linkText = `${Url.substring(0, 25)}${Url.length > 23 ? '...' : ''}`;
     }
     const processedURL = this.urlProcessor(url, 'autolink');
     let target = '_blank';
@@ -216,6 +219,8 @@ export default class AutoLink extends SyntaxBase {
         target = '_blank';
       }
     }
-    return `<a href="${encodeURIOnce(processedURL)}" rel="nofollow" target="${target}">${$e(linkText)}</a>`;
+    return `<span class="link-quote">(</span><a class="${className.join()}" title="点击打开链接" href="${encodeURIOnce(
+      processedURL,
+    )}" rel="nofollow" target="${target}">${$e(linkText)}</a><span class="link-quote">)</span>`;
   }
 }
