@@ -35,7 +35,7 @@ gulp.task('default', function (done) {
       startUnicode: lastUnicode,
       fontName: 'ch-icon', // required
       prependUnicode: true, // recommended option
-      formats: ['ttf', 'eot', 'woff', 'woff2', 'svg'], // default, 'woff2' and 'svg' are available
+      formats: ['ttf', 'woff2'], // default, 'woff2' and 'svg' are available
       timestamp: runTimestamp, // recommended to get consistent builds when watching files
       normalize: true,
     }),
