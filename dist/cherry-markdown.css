@@ -2185,7 +2185,7 @@ div[data-type=codeBlock] .token.inserted {
   font-size: 14px;
   min-height: 35px;
   min-width: 50px;
-  border: 1px solid #dfe6ee;
+  border: 1px solid rgba(203, 213, 224, 0.5019607843);
   background-color: #fff;
   box-shadow: 0 2px 15px -5px rgba(0, 0, 0, 0.5);
   border-radius: 3px;
@@ -2511,9 +2511,9 @@ div[data-type=codeBlock] .token.inserted {
   margin-left: -27px;
   transition: all 0.3s;
   z-index: 2;
-}
-[data-code-block-theme=default] .cherry-previewer div[data-type=codeBlock]:hover .cherry-copy-code-block, [data-code-block-theme=funky] .cherry-previewer div[data-type=codeBlock]:hover .cherry-copy-code-block, [data-code-block-theme=solarized-light] .cherry-previewer div[data-type=codeBlock]:hover .cherry-copy-code-block, [data-code-block-theme=coy] .cherry-previewer div[data-type=codeBlock]:hover .cherry-copy-code-block {
-  background-color: #3582fb;
+  border: 1px solid #CBD5E0;
+  color: #081E40;
+  background: #fff;
 }
 .cherry-previewer div[data-type=codeBlock]:hover .cherry-copy-code-block:hover {
   border: 1px solid #3A84FF;
@@ -2534,6 +2534,9 @@ div[data-type=codeBlock] .token.inserted {
   font-size: 12px;
   margin: 0px;
   font-weight: 400;
+}
+[data-toolbar-theme=dark] .cherry-color-wrap h3 {
+  color: #d7e6fe;
 }
 [data-toolbar-theme=dark] .cherry-color-wrap h3 {
   color: #d7e6fe;
