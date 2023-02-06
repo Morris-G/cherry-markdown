@@ -16,7 +16,7 @@
 import ParagraphBase from '@/core/ParagraphBase';
 import Prism from 'prismjs';
 import { escapeHTMLSpecialChar } from '@/utils/sanitize';
-import { getCodeBlockRule } from '@/utils/regexp';
+import { getTableRule, getCodeBlockRule } from '@/utils/regexp';
 import { prependLineFeedForParagraph } from '@/utils/lineFeed';
 
 Prism.manual = true;
@@ -37,7 +37,9 @@ export default class CodeBlock extends ParagraphBase {
     this.customParser = {};
     this.wrap = config.wrap; // 超出是否换行
     this.lineNumber = config.lineNumber; // 是否显示行号
+    this.copyCode = config.copyCode; // 是否显示“复制”按钮
     this.indentedCodeBlock = typeof config.indentedCodeBlock === 'undefined' ? true : config.indentedCodeBlock; // 是否支持缩进代码块
+    this.INLINE_CODE_REGEX = /(`+)(.+?(?:\n.+?)*?)\1/g;
     if (config && config.customRenderer) {
       this.customLang = Object.keys(config.customRenderer).map((lang) => lang.toLowerCase());
       this.customParser = { ...config.customRenderer };
@@ -194,7 +196,11 @@ export default class CodeBlock extends ParagraphBase {
       cacheCode = this.renderLineNumber(cacheCode);
     }
     cacheCode = `<div data-sign="${sign}" data-type="codeBlock" data-lines="${lines}">
-      <div class="cherry-copy-code-block" style="display:none;"><i class="ch-icon ch-icon-copy" title="copy"></i></div>
+      ${
+        this.copyCode
+          ? '<div class="cherry-copy-code-block" style="display:none;"><i class="ch-icon ch-icon-copy" title="copy"></i></div>'
+          : ''
+      }
       <pre class="language-${lang}">${this.wrapCode(cacheCode, lang)}</pre>
     </div>`;
     return cacheCode;
@@ -261,7 +267,7 @@ export default class CodeBlock extends ParagraphBase {
     // 预处理缩进代码块
     $str = this.$replaceCodeInIndent($str);
 
-    $str = $str.replace(this.RULE.reg, (match, leadingContent, lang, code) => {
+    $str = $str.replace(this.RULE.reg, (match, leadingContent, begin, lang, code) => {
       let $code = code;
       const { sign, lines } = this.computeLines(match, leadingContent, code);
       // 从缓存中获取html
@@ -306,12 +312,31 @@ export default class CodeBlock extends ParagraphBase {
       cacheCode = this.$codeCache(sign, cacheCode);
       return this.getCacheWithSpace(this.pushCache(cacheCode, sign, lines), match);
     });
+    // 表格里处理行内代码，让一个td里的行内代码语法生效，让跨td的行内代码语法失效
+    $str = $str.replace(getTableRule(true), (whole, ...args) => {
+      return whole
+        .split('|')
+        .map((oneTd) => {
+          return this.makeInlineCode(oneTd);
+        })
+        .join('|')
+        .replace(/`/g, '\\`');
+    });
     // 为了避免InlineCode被HtmlBlock转义，需要在这里提前缓存
     // InlineBlock只需要在afterMakeHtml还原即可
-    const INLINE_CODE_REGEX = /(`+)(.+?(?:\n.+?)*?)\1/g;
-    if (INLINE_CODE_REGEX.test($str)) {
+    $str = this.makeInlineCode($str);
+
+    // 处理缩进代码块
+    $str = this.$getIndentCodeBlock($str);
+
+    return $str;
+  }
+
+  makeInlineCode(str) {
+    let $str = str;
+    if (this.INLINE_CODE_REGEX.test($str)) {
       $str = $str.replace(/\\`/g, '~~not~inlineCode');
-      $str = $str.replace(INLINE_CODE_REGEX, (match, syntax, code) => {
+      $str = $str.replace(this.INLINE_CODE_REGEX, (match, syntax, code) => {
         if (code.trim() === '`') {
           return match;
         }
@@ -325,10 +350,6 @@ export default class CodeBlock extends ParagraphBase {
       });
       $str = $str.replace(/~~not~inlineCode/g, '\\`');
     }
-
-    // 处理缩进代码块
-    $str = this.$getIndentCodeBlock($str);
-
     return $str;
   }
 
