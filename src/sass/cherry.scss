@@ -136,7 +136,7 @@
   //border: 1px solid $borderColor;
   box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5);
   margin-left: -60px;
-  z-index: 1000;
+  z-index: 8;
 
   &-item {
     width: 100%;
@@ -184,7 +184,7 @@
   line-height: 2.8;
   flex-basis: 100%;
   box-sizing: border-box;
-  z-index: 1;
+  z-index: 2;
   user-select: none;
   background: $toolbarBgLight;
   border-bottom: 1px solid #e8eaee;
@@ -252,16 +252,24 @@
   }
 }
 
+
+.cherry {
+  .ace_search {
+    background: #FFF;
+  }
+}
+
 .cherry-sidebar {
-  width: 40px;
+  width: 30px;
   position: absolute;
   top: 48px;
   right: 7px;
-  z-index: 999;
-
+  z-index: 0;
+  bottom: 0;
+  overflow: hidden;
   .cherry-toolbar-button {
     height: 30px;
-    padding: 3px 12px 0 12px;
+    padding: 3px 12px 0 6px;
 
     &:hover {
       background: transparent;
@@ -303,7 +311,7 @@
 @import './components/bubble';
 
 .cherry-floatmenu {
-  z-index: 100;
+  z-index: 4;
   display: none;
   position: absolute;
   left: 30px;
@@ -439,7 +447,7 @@
   width: 15px;
   cursor: ew-resize;
   position: absolute;
-  z-index: 1000;
+  z-index: 12;
   background: transparent;
 
   &.cherry-drag--show {
@@ -454,7 +462,7 @@
 }
 
 .cherry-editor-mask {
-  z-index: 999;
+  z-index: 10;
   position: absolute;
   display: none;
   background: rgba(0, 0, 0, 0.2);
@@ -465,7 +473,7 @@
 }
 
 .cherry-previewer-mask {
-  z-index: 999;
+  z-index: 10;
   position: absolute;
   display: none;
   background: rgba(0, 0, 0, 0.4);
@@ -537,7 +545,7 @@
       border-radius: 5px;
       margin-left: -27px;
       transition: all 0.3s;
-      z-index: 1;
+      z-index: 2;
       border: 1px solid #CBD5E0;
       color: #081E40;
       background: #fff;
@@ -564,7 +572,7 @@
   position: fixed;
   width: auto;
   padding: 5px 10px;
-  z-index: 1000;
+  z-index: 6;
   background: #fff;
   box-shadow: $shadow;
 
@@ -572,6 +580,9 @@
     font-size: 12px;
     margin: 0px;
     font-weight: 400;
+  }
+  [data-toolbar-theme='dark'] & h3{
+    color: $toolbarBtnColorDark;
   }
 
   [data-toolbar-theme='dark'] & h3 {
@@ -646,3 +657,10 @@
   border-radius: 3px;
   cursor: pointer;
 }
+
+/** 引入自带的主题 */
+@import './themes/default.scss';
+@import './themes/dark.scss';
+@import './themes/light.scss';
+@import './themes/green.scss';
+@import './themes/red.scss';
